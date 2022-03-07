@@ -1,0 +1,9 @@
+suggestion
+product_feed
+  comments[
+    replies[]
+  ]
+    
+
+category -> reference to product_feed
+status -> reference to product_feed
