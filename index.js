@@ -8,6 +8,12 @@ mongoose.connect(uri).then(() => console.log('MongoDB Successfully Connected')).
 
 const app = express()
 
+app.use(express.json())
+app.use('/api/categories', require('./routes/categories'))
+app.use('/api/status', require('./routes/status'))
+app.use('/api/suggestions', require('./routes/suggestions'))
+
+
 
 app.get('/', (req, res) => {
   res.send('Suggestion App')
