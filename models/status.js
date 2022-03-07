@@ -9,10 +9,12 @@ const Status = mongoose.model('Status', statusSchema)
 
 
 
-const validateStatus = () => {
-  Joi.object({
-    title: Joi.string().min(3).max(225).required(),
-  })
+const validateStatus = (status) => {
+  const schema =  Joi.object({
+    title: Joi.string().min(4).max(225).required(),
+ })
+  
+  return schema.validate(status)
 }
 
 
