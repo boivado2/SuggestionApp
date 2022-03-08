@@ -11,6 +11,8 @@ const app = express()
 app.use(express.json())
 app.use('/api/categories', require('./routes/categories'))
 app.use('/api/suggestions', require('./routes/suggestions'))
+app.use('/api/users', require('./routes/users'))
+
 
 
 
