@@ -20,7 +20,8 @@ router.post('/', async (req, res) => {
   user = new User({
     username: req.body.username,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    image_url: req.body.image_url
   })
 
   const salt = await bcrypt.genSalt(10)
