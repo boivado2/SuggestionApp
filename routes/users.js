@@ -1,6 +1,6 @@
 const express = require("express");
 const {User, validate} = require('../models/user')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 
 const router = express.Router()
 
@@ -12,18 +12,24 @@ router.get('/', async(req, res) => {
 router.post('/', async (req, res) => {
   const { error } = validate(req.body)
   if (error) return res.status(400).send(error.message)
+
+  let user = await User.findOne({ email: req.body.email })
+  if(user) return res.status(400).send('User already exist')
   
-  const user = new User({
+  
+  user = new User({
     username: req.body.username,
     email: req.body.email,
-    password: req.body.email
+    password: req.body.password
   })
 
   const salt = await bcrypt.genSalt(10)
   user.password = await bcrypt.hash(user.password, salt)
+  await user.save()
 
-  // await user.save()
-  res.send(user)
+  const token = user.generateAuthToken()
+  res.header('x-auth-token', token).send(user)
+
 })
 
 
