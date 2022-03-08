@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 const Joi = require('joi')
-const { categorySchema } = require('./category')
-const {statusSchema} = require('./status')
 
 
 const suggestionSchema = new mongoose.Schema({
@@ -9,7 +7,7 @@ const suggestionSchema = new mongoose.Schema({
   upvotes: {type: Number, min:0, max:100000, required: true},
   description: {type: String, minlength: 6, maxlength: 1000, required: true},
   category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
-  status: {type: String, default:'Suggestion'},
+  status: { type: String, default: 'Suggestion' }
 })
 
 const Suggestion = mongoose.model('Suggestion', suggestionSchema)
