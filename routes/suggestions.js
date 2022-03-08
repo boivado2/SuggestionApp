@@ -19,9 +19,9 @@ router.post('/', async (req, res) => {
   const category = await Category.findById(req.body.categoryId)
   if(!category) return res.status(400).send("invalid category")
 
-  const status = await Status.findById(req.body.statusId)
-  console.log(req.body.statusId)
-  if(!status) return res.status(400).send("invalid status")
+  // const status = await Status.findById(req.body.statusId)
+  // console.log(req.body.statusId)
+  // if(!status) return res.status(400).send("invalid status")
 
 
   
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     upvotes: req.body.upvotes,
-    status: status._id,
+    status:req.body.status,
     category: category._id
   })
 
