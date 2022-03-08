@@ -16,14 +16,16 @@ const Suggestion = mongoose.model('Suggestion', suggestionSchema)
 
 
 
-const validateSuggestion = () => {
-  Joi.object({
+const validateSuggestion = (suggestion) => {
+ const schema =  Joi.object({
     title: Joi.string().min(3).max(225).required(),
     upvotes: Joi.number().min(0).max(100000).required(),
-    description: Joi.string().min(6).max(1500).require(),
+    description: Joi.string().min(6).max(1500).required(),
     categoryId: Joi.objectId(),
     statusId: Joi.objectId(),
-  })
+ })
+  
+  return schema.validate(suggestion)
 }
 
 

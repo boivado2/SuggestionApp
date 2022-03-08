@@ -5,7 +5,7 @@ const categorySchema = new mongoose.Schema({
   title: {type: String, minlength: 2, maxlength: 225, required: true},
 })
 
-const Category = mongoose.model('category', categorySchema)
+const Category = mongoose.model('Category', categorySchema)
 
 
 
