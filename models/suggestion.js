@@ -7,7 +7,8 @@ const suggestionSchema = new mongoose.Schema({
   upvotes: {type: Number, min:0, max:100000, required: true},
   description: {type: String, minlength: 6, maxlength: 1000, required: true},
   category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
-  status: { type: String, default: 'Suggestion' }
+  status: { type: String, default: 'Suggestion' },
+  comments: [{type:mongoose.Schema.Types.ObjectId, ref:"Comment"}]
 })
 
 const Suggestion = mongoose.model('Suggestion', suggestionSchema)

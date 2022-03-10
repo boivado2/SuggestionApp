@@ -1,13 +1,16 @@
 const express = require("express");
+const mongoose = require('mongoose')
 const { Suggestion, validate } = require('../models/suggestion')
-const { Category,  } = require('../models/category')
+const { Category, } = require('../models/category')
+const { Comment, validateComment } = require('../models/comment')
+const {User} = require('../models/user')
 
 
 
 const router = express.Router()
 
 router.get('/', async(req, res) => {
-  const suggestions = await Suggestion.find().populate('category')
+  const suggestions = await Suggestion.find().populate('category').populate('comments')
   res.send(suggestions)
 })
 
@@ -69,5 +72,55 @@ router.delete('/:id', async (req, res) => {
 
   res.send(suggestion)
 })
+
+
+
+// comments
+
+
+router.post('/:id/comments', async (req, res) => {
+  const session = await mongoose.startSession()
+
+  const { error } = validateComment(req.body)
+  if (error) return res.status(400).send(error.message)
+
+  const suggestion = await Suggestion.findById(req.params.id).session(session)
+  if (!suggestion) return res.status(404).send("Suggestion not found")
+  
+  const user = await User.findById(req.body.userId)
+  if(!user) return res.status(400).send("invalid User")
+  
+  const comment = new Comment({
+    title: req.body.title,
+    user: {
+      _id: user._id,
+      image_url: user._image_url,
+      username: user.username,
+      email: user.email
+    }
+  },{session: session})
+
+
+  try {
+    await session.withTransaction(async () => {
+      await comment.save()
+
+      await suggestion.comments.push(comment)
+      
+      suggestion.save()
+      res.send(comment)
+
+ })
+     session.endSession()
+  } catch (ex) {
+    console.log(ex)
+  }
+
+
+
+})
+
+
+
 
 module.exports = router
