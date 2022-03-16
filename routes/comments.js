@@ -1,7 +1,9 @@
 const express = require("express");
 const { Suggestion } = require('../models/suggestion')
-const { Comment, validate } = require('../models/comment')
-const {User} = require('../models/user')
+const { Comment, validateComment } = require('../models/comment')
+const { Reply, validateReply } = require('../models/reply')
+const {User} = require('../models/user');
+const { default: mongoose } = require("mongoose");
 
 
 
@@ -12,39 +14,108 @@ const router = express.Router()
 //   res.send(categories)
 // })
 
-router.post('/:id/comment', async (req, res) => {
+
+
+router.post('/comments/:suggestionId', async (req, res) => {
   const session = await mongoose.startSession()
 
-  const { error } = validate(req.body)
+  const { error } = validateComment(req.body)
   if (error) return res.status(400).send(error.message)
-
-  const suggestion = await Suggestion.findById(req.params.id).session(session)
-  if (!suggestion) return res.status(404).send("Suggestion not found")
   
-  const user = await User.findById(req.body.userId)
-  if(!user) return res.status(400).send("invalid User")
-  
-  const comment = new Comment({
-    title: req.body.title,
-    user: {
-      _id: user._id,
-      image_url: user._image_url,
-      username: user.username,
-      email: user.email
-    }
-  },{session: session})
-
-
   try {
-    await session.withTransaction(async () => {
-      await comment.save()
+    const transaction = await session.withTransaction(async () => {
+      const suggestion = await Suggestion.findById(req.params.suggestionId).session(session)
+      if (!suggestion) return res.status(400).send("invalid suggestion")
+      
+      const user = await User.findById(req.body.userId)
+      if(!user) return res.status(400).send("invalid User")
+      
+      const comment = new Comment({
+        content: req.body.content,
+        suggestion : suggestion._id,
+        user: {
+          _id: user._id,
+          image_url: user._image_url,
+          username: user.username,
+          email: user.email
+        }
+      }, { session : session })
+
+      await comment.save({session})
 
       await suggestion.comments.push(comment)
-      
+   
+     await suggestion.save()
       res.send(comment)
 
  })
+    if (transaction) console.log('successfull' + transaction + session)
+    else console.log("transaction not working")
      session.endSession()
+  } catch (ex) {
+    console.log(ex)
+    res.status(500).send("Something failed")
+  }
+  
+
+
+
+})
+
+
+router.delete('/comments/:commentId', async (req, res) => {
+  const comment = await Comment.findById(req.params.commentId)
+  if (!comment) return res.status(404).send("comment with the given id not found.")
+  
+const suggestion =   await Suggestion.findByIdAndUpdate(
+    comment.suggestion, {
+      $pull : {comments: req.params.commentId}
+})
+  if (!suggestion) return res.status(400).send("invalid Suggestion")
+  
+  await Comment.deleteMany({_id: req.params.commentId})
+
+  res.send("deleted Succesfully")
+
+})
+
+
+
+
+// reply a comment
+router.post('/replies/:commentId', async (req, res) => {
+  try {
+    const session = await mongoose.startSession()
+
+    const { error } = validateReply(req.body)
+    if (error) return res.status(400).send(error.message)
+
+    const comment = await Comment.findById(req.params.commentId).session(session)
+    if (!comment) return res.status(400).send("invalid comment")
+    const user = await User.findById(req.body.userId)
+    if(!user) return res.status(400).send("invalid User")
+    
+    const reply = new Reply({
+      content: req.body.content,
+      replyingTo: "@" + comment.user.username,
+      user: {
+        _id: user._id,
+        image_url: user._image_url,
+        username: user.username,
+        email: user.email
+      },
+      commentId: comment._id
+    }, { session: session })
+    
+      await session.withTransaction(async () => {
+        await comment.replies.push(reply)
+        await reply.save({session})
+        await comment.save({session})
+        res.send(reply)
+
+  })
+      session.endSession()
+      console.log("success")
   } catch (ex) {
     console.log(ex)
   }
@@ -52,6 +123,23 @@ router.post('/:id/comment', async (req, res) => {
 
 
 })
+
+
+router.delete('/replies/:replyId', async (req, res) => {
+  try {
+
+    const reply = await Reply.findById(req.params.replyId)
+    if (!reply) return res.status(404).send("reply with the given id not found.")
+      
+    await Reply.deleteOne({ commentId: reply.commentId, replyId: req.params.replyId })
+    res.send("deleted Successfully")
+    
+  } catch (ex) {
+    console.log(ex)
+  }
+  
+})
+
 
 
 
