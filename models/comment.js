@@ -38,8 +38,8 @@ const commentSchema = new mongoose.Schema({
 })
 
 commentSchema.pre('deleteMany', function (next) {
-  const replyId = this.getQuery()._id
-  Reply.deleteMany({reply: replyId}, next)
+  const commentId = this.getQuery()._id
+  Reply.deleteMany({commentId}, next)
 })
 
 const Comment = mongoose.model('Comment', commentSchema)

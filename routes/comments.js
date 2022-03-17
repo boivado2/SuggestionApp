@@ -22,8 +22,7 @@ router.post('/comments/:suggestionId', async (req, res) => {
   const { error } = validateComment(req.body)
   if (error) return res.status(400).send(error.message)
   
-  try {
-    const transaction = await session.withTransaction(async () => {
+     await session.withTransaction(async () => {
       const suggestion = await Suggestion.findById(req.params.suggestionId).session(session)
       if (!suggestion) return res.status(400).send("invalid suggestion")
       
@@ -49,13 +48,9 @@ router.post('/comments/:suggestionId', async (req, res) => {
       res.send(comment)
 
  })
-    if (transaction) console.log('successfull' + transaction + session)
-    else console.log("transaction not working")
+  
      session.endSession()
-  } catch (ex) {
-    console.log(ex)
-    res.status(500).send("Something failed")
-  }
+
   
 
 
@@ -67,10 +62,10 @@ router.delete('/comments/:commentId', async (req, res) => {
   const comment = await Comment.findById(req.params.commentId)
   if (!comment) return res.status(404).send("comment with the given id not found.")
   
-const suggestion =   await Suggestion.findByIdAndUpdate(
-    comment.suggestion, {
-      $pull : {comments: req.params.commentId}
-})
+  const suggestion =   await Suggestion.findByIdAndUpdate(
+      comment.suggestion, {
+        $pull : {comments: req.params.commentId}
+  })
   if (!suggestion) return res.status(400).send("invalid Suggestion")
   
   await Comment.deleteMany({_id: req.params.commentId})
@@ -84,7 +79,6 @@ const suggestion =   await Suggestion.findByIdAndUpdate(
 
 // reply a comment
 router.post('/replies/:commentId', async (req, res) => {
-  try {
     const session = await mongoose.startSession()
 
     const { error } = validateReply(req.body)
@@ -115,18 +109,12 @@ router.post('/replies/:commentId', async (req, res) => {
 
   })
       session.endSession()
-      console.log("success")
-  } catch (ex) {
-    console.log(ex)
-  }
-
 
 
 })
 
 
 router.delete('/replies/:replyId', async (req, res) => {
-  try {
 
     const reply = await Reply.findById(req.params.replyId)
     if (!reply) return res.status(404).send("reply with the given id not found.")
@@ -134,9 +122,7 @@ router.delete('/replies/:replyId', async (req, res) => {
     await Reply.deleteOne({ commentId: reply.commentId, replyId: req.params.replyId })
     res.send("deleted Successfully")
     
-  } catch (ex) {
-    console.log(ex)
-  }
+
   
 })
 
