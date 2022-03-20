@@ -1,0 +1,4 @@
+{
+	"feedPrivatekey": 12345,
+	"db": "mongodb://Bomane:27017,Bomane:27018,Bomane:27019/product-feed-test?replicaSet=rs"
+}

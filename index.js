@@ -7,11 +7,11 @@ const config = require('config')
 const error = require('./middleware/error')
 const winston = require('winston')
 
-
-const uri = 'mongodb://Bomane:27017,Bomane:27018,Bomane:27019/product-feed?replicaSet=rs'
-mongoose.connect(uri).then(() => console.log('MongoDB Successfully Connected')).catch((ex) => console.log(ex.message))
-
 const app = express()
+
+
+const dbUrl = config.get('db')
+mongoose.connect(dbUrl).then(() => winston.log('info', "mogodb conneted succesfully"))
 
 winston.add(new winston.transports.File({filename: 'exceptions.log', handleExceptions: true, handleRejections: true}),)
 
@@ -37,4 +37,6 @@ app.get('/', (req, res) => {
 })
 
 const port = process.env.PORT || 1200
-app.listen(port, () => console.log('Listenning on  ' + port))
+const server = app.listen(port, () => console.log('Listenning on  ' + port))
+
+module.exports = server

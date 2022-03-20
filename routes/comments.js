@@ -63,7 +63,7 @@ router.delete('/comments/:commentId', async (req, res) => {
   if (!comment) return res.status(404).send("comment with the given id not found.")
   
   const suggestion =   await Suggestion.findByIdAndUpdate(
-      comment.suggestion, {
+      comment.suggestionId, {
         $pull : {comments: req.params.commentId}
   })
   if (!suggestion) return res.status(400).send("invalid Suggestion")
