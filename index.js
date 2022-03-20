@@ -15,10 +15,6 @@ const app = express()
 
 winston.add(new winston.transports.File({filename: 'exceptions.log', handleExceptions: true, handleRejections: true}),)
 
-// throw new Error("Something failed")
-
-const p = Promise.reject(new Error('Something failed miserably'))
-p.then(() => 'done')
 
 
 app.use(express.json())

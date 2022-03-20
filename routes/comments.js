@@ -31,7 +31,7 @@ router.post('/comments/:suggestionId', async (req, res) => {
       
       const comment = new Comment({
         content: req.body.content,
-        suggestion : suggestion._id,
+        suggestionId : suggestion._id,
         user: {
           _id: user._id,
           image_url: user._image_url,
@@ -83,9 +83,8 @@ router.post('/replies/:commentId', async (req, res) => {
 
     const { error } = validateReply(req.body)
     if (error) return res.status(400).send(error.message)
-
     const comment = await Comment.findById(req.params.commentId).session(session)
-    if (!comment) return res.status(400).send("invalid comment")
+  if (!comment) return res.status(400).send("invalid comment")
     const user = await User.findById(req.body.userId)
     if(!user) return res.status(400).send("invalid User")
     
@@ -98,7 +97,9 @@ router.post('/replies/:commentId', async (req, res) => {
         username: user.username,
         email: user.email
       },
+      suggestionId:comment.suggestionId,
       commentId: comment._id
+
     }, { session: session })
     
       await session.withTransaction(async () => {

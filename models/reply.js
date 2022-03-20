@@ -8,7 +8,8 @@ const url = "https://i.stack.imgur.com/34AD2.jpg"
 const replySchema = new mongoose.Schema({
   content: { type: String, minlength: 3, maxlength: 225, required: true, trim :true },
   replyingTo: { type: String, minlength: 4, maxlength: 50 },
-  commentId: {type: mongoose.Schema.Types.ObjectId, ref: "Reply", required:true},
+  suggestionId: { type: mongoose.Schema.Types.ObjectId,  required: true },
+  commentId: {type: mongoose.Schema.Types.ObjectId, ref: "Comment", required:true},
   user: {
     type :new mongoose.Schema({
       image_url: { type: String, default: url, minlength: 4, maxlength: 1125, required: true },
@@ -38,7 +39,8 @@ const validateReply = (reply) => {
   const schema =  Joi.object({
      content: Joi.string().min(3).max(225).required(),
     userId: Joi.objectId(),
-     commentId: Joi.objectId()
+    commentId: Joi.objectId(),
+     SuggestionId: Joi.objectId()
   })
    
    return schema.validate(reply)

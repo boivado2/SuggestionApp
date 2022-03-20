@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Joi = require('joi')
 const  { Comment } =  require('./comment')
+const { Reply } = require('./reply')
 
 
 const suggestionSchema = new mongoose.Schema({
@@ -15,7 +16,8 @@ const suggestionSchema = new mongoose.Schema({
 
 suggestionSchema.pre("deleteOne",function (next)  {
   const { suggestionId } = this.getQuery()
-  Comment.deleteMany({suggestion :suggestionId}, next)
+  Comment.deleteMany({  suggestionId }, next)
+  Reply.deleteMany({suggestionId}, next)
 })
 
 const Suggestion = mongoose.model('Suggestion', suggestionSchema)

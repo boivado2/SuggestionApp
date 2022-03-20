@@ -8,7 +8,7 @@ const url = "https://i.stack.imgur.com/34AD2.jpg"
 
 const commentSchema = new mongoose.Schema({
   content: { type: String, minlength: 4, maxlength: 225, required: true },
-  suggestion : {type : mongoose.Schema.Types.ObjectId, ref:"Suggestion"},
+  suggestionId : {type : mongoose.Schema.Types.ObjectId, ref:"Suggestion"},
   user: {
    type:new mongoose.Schema({
       image_url: { type: String, default: url, minlength: 4, maxlength: 1125, required: true },
