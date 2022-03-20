@@ -1,9 +1,10 @@
 const express = require("express");
-const {Category, validate} = require('../models/category')
+const { Category, validate } = require('../models/category')
+const validateObjectId = require('../middleware/validateobjectIds')
 
 const router = express.Router()
 
-router.get('/', async(req, res) => {
+router.get('/',  async(req, res) => {
   const categories = await Category.find()
   res.send(categories)
 })
@@ -15,15 +16,15 @@ router.post('/', async (req, res) => {
   const category = new Category({
     title: req.body.title
   })
-
   await category.save()
   res.send(category)
 })
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateObjectId, async (req, res) => {
   const { error } = validate(req.body)
   if (error) return res.status(400).send(error.message)
+  
   const categoty = await Category.findByIdAndUpdate(req.params.id, { title: req.body.title }, { new: true })
   
   if (!categoty) return res.status(404).send('category with the given Id not found')
@@ -33,7 +34,7 @@ router.put('/:id', async (req, res) => {
 })
 
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
   const categoty = await Category.findById(req.params.id)
   if (!categoty) return res.status(404).send('category with the given Id not found')
 
@@ -41,7 +42,7 @@ router.get('/:id', async (req, res) => {
 })
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateObjectId, async (req, res) => {
 
   const categoty = await Category.findByIdAndDelete(req.params.id)
   if (!categoty) return res.status(404).send('category with the given Id not found')

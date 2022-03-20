@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const config = require('config')
 const error = require('./middleware/error')
 const winston = require('winston')
+const validateobjectIds = require('./middleware/validateobjectIds')
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.use('/api/suggestions', require('./routes/comments'))
 app.use('/api/users', require('./routes/users'))
 app.use('/api/auth', require('./routes/auth'))
 app.use(error)
+
 
 
 if (!config.get('feedPrivatekey')) {
