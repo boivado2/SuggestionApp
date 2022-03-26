@@ -7,6 +7,7 @@ const config = require('config')
 const error = require('./middleware/error')
 const winston = require('winston')
 const validateobjectIds = require('./middleware/validateobjectIds')
+const cors = require('cors')
 
 const app = express()
 
@@ -19,6 +20,7 @@ winston.add(new winston.transports.File({filename: 'exceptions.log', handleExcep
 
 
 app.use(express.json())
+app.use(cors())
 app.use('/api/categories', require('./routes/categories'))
 app.use('/api/suggestions', require('./routes/suggestions'))
 app.use('/api/suggestions', require('./routes/comments'))

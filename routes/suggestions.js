@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require('mongoose')
 const { Suggestion, validate } = require('../models/suggestion')
 const { Category, } = require('../models/category')
-const {Comment} = require('../models/comment')
+const { Comment } = require('../models/comment')
+const validateobjectIds = require("../middleware/validateobjectIds");
+
 
 
 const {User} = require('../models/user')
@@ -12,7 +14,7 @@ const {User} = require('../models/user')
 const router = express.Router()
 
 router.get('/', async(req, res) => {
-  const suggestions = await Suggestion.find().populate('category', '-_v').populate('comments', '-_v ')
+  const suggestions = await Suggestion.find().populate('category', '-__v').populate('comments', '-__v ')
   res.send(suggestions)
 })
 
@@ -29,7 +31,10 @@ router.post('/', async (req, res) => {
     description: req.body.description,
     upvotes: req.body.upvotes,
     status:req.body.status,
-    category: category._id
+    category: {
+      _id: category._id,
+      title: category.title
+    }
   })
 
   await suggestion.save()
@@ -37,7 +42,7 @@ router.post('/', async (req, res) => {
 })
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateobjectIds, async (req, res) => {
 
   const { error } = validate(req.body)
   if (error) return res.status(400).send(error.message)
@@ -61,20 +66,30 @@ router.put('/:id', async (req, res) => {
 })
 
 
-router.get('/:id', async (req, res) => {
+router.patch('/:id',async (req, res) => {
+  
   const suggestion = await Suggestion.findById(req.params.id).populate('category')
   if (!suggestion) return res.status(404).send('suggestion with the given Id not found')
 
+  await suggestion.upvotes++
+  await suggestion.save()
   res.send(suggestion)
 })
 
 
-router.delete('/:suggestionId', async (req, res) => {
+router.get('/:id', validateobjectIds, async (req, res) => {
+  const suggestion = await Suggestion.findById(req.params.id).populate('category', '-__v').populate('comments', '-__v')
+  if (!suggestion) return res.status(404).send('suggestion with the given Id not found')
+  res.send(suggestion)
+})
 
-  const suggestion =  await Suggestion.findById(req.params.suggestionId)
+
+router.delete('/:id', validateobjectIds, async (req, res) => {
+
+  const suggestion =  await Suggestion.findById(req.params.id)
   if (!suggestion) return res.status(404).send('suggestion with the given Id not found')
    
-  await Suggestion.deleteOne({suggestionId: req.params.suggestionId})
+  await Suggestion.deleteOne({_id: req.params.id})
  
   res.send('deleted Succesfully')
  

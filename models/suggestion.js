@@ -2,22 +2,23 @@ const mongoose = require('mongoose')
 const Joi = require('joi')
 const  { Comment } =  require('./comment')
 const { Reply } = require('./reply')
+const {categorySchema} = require('./category')
 
 
 const suggestionSchema = new mongoose.Schema({
   title: {type: String, minlength: 4, maxlength: 225, required: true},
-  upvotes: {type: Number, min:0, max:100000, required: true},
+  upvotes: {type: Number, min:0, max:100000, default:0},
   description: {type: String, minlength: 6, maxlength: 1000, required: true},
-  category: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
+  category: {type:categorySchema, required:true },
   status: { type: String, default: 'Suggestion' },
   comments: [{type:mongoose.Schema.Types.ObjectId, ref:"Comment"}]
 })
 
 
 suggestionSchema.pre("deleteOne",function (next)  {
-  const { suggestionId } = this.getQuery()
-  Comment.deleteMany({  suggestionId }, next)
-  Reply.deleteMany({suggestionId}, next)
+  const { _id } = this.getQuery()
+  Comment.deleteMany({  _id }, next)
+  Reply.deleteMany({_id}, next)
 })
 
 const Suggestion = mongoose.model('Suggestion', suggestionSchema)
@@ -27,7 +28,7 @@ const Suggestion = mongoose.model('Suggestion', suggestionSchema)
 const validateSuggestion = (suggestion) => {
  const schema =  Joi.object({
     title: Joi.string().min(3).max(225).required(),
-    upvotes: Joi.number().min(0).max(100000).required(),
+    upvotes: Joi.number().min(0).max(100000),
     description: Joi.string().min(6).max(1500).required(),
     categoryId: Joi.objectId(),
     status: Joi.string().min(3).max(100),

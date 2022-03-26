@@ -7,23 +7,24 @@ const { default: mongoose } = require("mongoose");
 
 
 
+
 const router = express.Router()
 
-// router.get('/', async(req, res) => {
-//   const categories = await Category.find()
-//   res.send(categories)
-// })
+router.get('/comments/:id', async(req, res) => {
+  const comments = await Comment.find({suggestionId: req.params.id})
+  res.send(comments)
+})
 
 
 
-router.post('/comments/:suggestionId', async (req, res) => {
+router.post('/comments/:id', async (req, res) => {
   const session = await mongoose.startSession()
 
   const { error } = validateComment(req.body)
   if (error) return res.status(400).send(error.message)
   
      await session.withTransaction(async () => {
-      const suggestion = await Suggestion.findById(req.params.suggestionId).session(session)
+      const suggestion = await Suggestion.findById(req.params.id).session(session)
       if (!suggestion) return res.status(400).send("invalid suggestion")
       
       const user = await User.findById(req.body.userId)
@@ -58,23 +59,27 @@ router.post('/comments/:suggestionId', async (req, res) => {
 })
 
 
-router.delete('/comments/:commentId', async (req, res) => {
-  const comment = await Comment.findById(req.params.commentId)
+router.delete('/comments/:id', async (req, res) => {
+  const comment = await Comment.findById(req.params.id)
   if (!comment) return res.status(404).send("comment with the given id not found.")
   
   const suggestion =   await Suggestion.findByIdAndUpdate(
       comment.suggestionId, {
-        $pull : {comments: req.params.commentId}
+        $pull : {comments: req.params.id}
   })
   if (!suggestion) return res.status(400).send("invalid Suggestion")
   
-  await Comment.deleteMany({_id: req.params.commentId})
+  await Comment.deleteMany({_id: req.params.id})
 
   res.send("deleted Succesfully")
 
 })
 
-
+// get all replies associated with a given comment
+router.get('/replies/:id', async(req, res) => {
+  const replies = await Reply.find({commentId: req.params.id})
+  res.send(replies)
+})
 
 
 // reply a comment
