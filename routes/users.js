@@ -6,20 +6,19 @@ const router = express.Router()
 
 router.get('/', async(req, res) => {
   const users = await User.find()
-  res.send(users)
+  res.json(users)
 })
 
 router.post('/', async (req, res) => {
   const { error } = validate(req.body)
   if (error) return res.status(400).send(error.message)
 
-  let user = await User.findOne({ email: req.body.email })
-  if(user) return res.status(400).send('User already exist')
-  
+  let user = await User.findOne({ username: req.body.username })
+  if(user) return res.status(400).send('User name already taken!')
   
   user = new User({
     username: req.body.username,
-    email: req.body.email,
+    name: req.body.name,
     password: req.body.password,
     image_url: req.body.image_url
   })

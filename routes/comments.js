@@ -37,6 +37,7 @@ router.post('/:id/comments', async (req, res) => {
         content: req.body.content,
         suggestionId: suggestion._id,
         parentId: req.body.parentId,
+        replyingTo: user.email,
         user: {
           _id: user._id,
           image_url: user._image_url,
@@ -46,16 +47,16 @@ router.post('/:id/comments', async (req, res) => {
       })
 
       await comment.save()
-      res.send(comment)
+      res.json(comment)
 
 
 })
 
 
 router.delete('/comments/:id', async (req, res) => {
-  const comment = await Comment.findById(req.params.id)
+  
+  const comment = await Comment.findByIdAndDelete({_id: req.params.id})
   if (!comment) return res.status(404).json({ error: "comment with the given id not found." })
-    
   await Comment.deleteMany({parentId: req.params.id})
 
   res.send("deleted Succesfully")

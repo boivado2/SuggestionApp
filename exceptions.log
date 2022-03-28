@@ -36,3 +36,11 @@
 {"level":"info","message":"mogodb conneted succesfully"}
 {"level":"info","message":"mogodb conneted succesfully"}
 {"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"body":"{\n  \"content\": \"greate idea it realy helps to comfort user during night  whoops!!\",\n  \"userId\": \"6241ba38f20fc14b6f79b250\",\n}","expose":true,"level":"error","message":"Unexpected token } in JSON at position 124 Unexpected token } in JSON at position 124","stack":"SyntaxError: Unexpected token } in JSON at position 124\n    at JSON.parse (<anonymous>)\n    at parse (C:\\Users\\johng\\feedbackend\\node_modules\\body-parser\\lib\\types\\json.js:89:19)\n    at C:\\Users\\johng\\feedbackend\\node_modules\\body-parser\\lib\\read.js:121:18\n    at invokeCallback (C:\\Users\\johng\\feedbackend\\node_modules\\raw-body\\index.js:224:16)\n    at done (C:\\Users\\johng\\feedbackend\\node_modules\\raw-body\\index.js:213:7)\n    at IncomingMessage.onEnd (C:\\Users\\johng\\feedbackend\\node_modules\\raw-body\\index.js:273:7)\n    at IncomingMessage.emit (node:events:402:35)\n    at endReadableNT (node:internal/streams/readable:1343:12)\n    at processTicksAndRejections (node:internal/process/task_queues:83:21)","status":400,"statusCode":400,"type":"entity.parse.failed"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
