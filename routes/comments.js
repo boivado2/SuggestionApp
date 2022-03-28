@@ -1,59 +1,52 @@
 const express = require("express");
 const { Suggestion } = require('../models/suggestion')
 const { Comment, validateComment } = require('../models/comment')
-const { Reply, validateReply } = require('../models/reply')
 const {User} = require('../models/user');
-const { default: mongoose } = require("mongoose");
 
 
 
 
 const router = express.Router()
 
-router.get('/comments/:id', async(req, res) => {
+router.get('/:id/comments', async(req, res) => {
   const comments = await Comment.find({suggestionId: req.params.id})
   res.send(comments)
 })
 
 
 
-router.post('/comments/:id', async (req, res) => {
-  const session = await mongoose.startSession()
+router.post('/:id/comments', async (req, res) => {
 
-  const { error } = validateComment(req.body)
-  if (error) return res.status(400).send(error.message)
+      const { error } = validateComment(req.body)
+      if (error) return res.status(400).json({ error: error.message })
+      
+      if (req.body.parentId) {
+        let comment = await Comment.findById(req.body.parentId)
+        if (!comment) return res.status(400).json({ error: 'invalid comment' })
+        
+      }
   
-     await session.withTransaction(async () => {
-      const suggestion = await Suggestion.findById(req.params.id).session(session)
-      if (!suggestion) return res.status(400).send("invalid suggestion")
+  
+      const suggestion = await Suggestion.findById(req.params.id)
+      if (!suggestion) return res.status(404).json({error: "suggestion not found."})
       
       const user = await User.findById(req.body.userId)
-      if(!user) return res.status(400).send("invalid User")
+      if(!user) return res.status(400).json({error: "user not found"})
       
-      const comment = new Comment({
+      comment = new Comment({
         content: req.body.content,
-        suggestionId : suggestion._id,
+        suggestionId: suggestion._id,
+        parentId: req.body.parentId,
         user: {
           _id: user._id,
           image_url: user._image_url,
           username: user.username,
           email: user.email
         }
-      }, { session : session })
+      })
 
-      await comment.save({session})
-
-      await suggestion.comments.push(comment)
-   
-     await suggestion.save()
+      await comment.save()
       res.send(comment)
-
- })
-  
-     session.endSession()
-
-  
-
 
 
 })
@@ -61,15 +54,9 @@ router.post('/comments/:id', async (req, res) => {
 
 router.delete('/comments/:id', async (req, res) => {
   const comment = await Comment.findById(req.params.id)
-  if (!comment) return res.status(404).send("comment with the given id not found.")
-  
-  const suggestion =   await Suggestion.findByIdAndUpdate(
-      comment.suggestionId, {
-        $pull : {comments: req.params.id}
-  })
-  if (!suggestion) return res.status(400).send("invalid Suggestion")
-  
-  await Comment.deleteMany({_id: req.params.id})
+  if (!comment) return res.status(404).json({ error: "comment with the given id not found." })
+    
+  await Comment.deleteMany({parentId: req.params.id})
 
   res.send("deleted Succesfully")
 

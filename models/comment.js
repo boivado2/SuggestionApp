@@ -17,10 +17,9 @@ const commentSchema = new mongoose.Schema({
     required:true
   },
  
-
-
  
 })
+
 
 
 const Comment = mongoose.model('Comment', commentSchema)

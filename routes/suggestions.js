@@ -2,28 +2,22 @@ const express = require("express");
 const mongoose = require('mongoose')
 const { Suggestion, validate } = require('../models/suggestion')
 const { Category, } = require('../models/category')
-const { Comment } = require('../models/comment')
 const validateobjectIds = require("../middleware/validateobjectIds");
-
-
-
-const {User} = require('../models/user')
-
 
 
 const router = express.Router()
 
 router.get('/', async(req, res) => {
-  const suggestions = await Suggestion.find().populate('category', '-__v').populate('comments', '-__v ')
-  res.send(suggestions)
+  const suggestions = await Suggestion.find()
+  res.json(suggestions)
 })
 
 router.post('/', async (req, res) => {
   const { error } = validate(req.body)
-  if (error) return res.status(400).send(error.message)
+  if (error) return res.status(400).json({ error: error.message })
 
   const category = await Category.findById(req.body.categoryId)
-  if(!category) return res.status(400).send("invalid category")
+  if (!category) return res.status(400).json({ error: "ivalid category." })
 
   
   const suggestion = new Suggestion({
@@ -38,17 +32,17 @@ router.post('/', async (req, res) => {
   })
 
   await suggestion.save()
-  res.send(suggestion)
+  res.json(suggestion)
 })
 
 
 router.put('/:id', validateobjectIds, async (req, res) => {
 
   const { error } = validate(req.body)
-  if (error) return res.status(400).send(error.message)
+  if (error) return res.status(400).json({ error: error.message })
 
   const category = await Category.findById(req.body.categoryId)
-  if (!category) return res.status(404).send('ivalid category')
+  if (!category) return res.status(400).json({ error: 'ivalid category' })
 
   const suggestion = await Suggestion.findByIdAndUpdate(req.params.id, {
     title: req.body.title,
@@ -63,27 +57,27 @@ router.put('/:id', validateobjectIds, async (req, res) => {
   , { new: true })
   
  
-  if (!suggestion) return res.status(400).send('suggestion  not found.')
+  if (!suggestion) return res.status(404).send('suggestion  not found.')
   await suggestion.save()
-  res.send(suggestion)
+  res.json(suggestion)
 })
 
 
 router.patch('/:id',async (req, res) => {
   
-  const suggestion = await Suggestion.findById(req.params.id).populate('category')
-  if (!suggestion) return res.status(404).send('suggestion  not found')
+  const suggestion = await Suggestion.findById(req.params.id)
+  if (!suggestion) return res.status(404).json({ error: 'suggestion  not found' })
 
   await suggestion.upvotes++
   await suggestion.save()
-  res.send(suggestion)
+  res.json(suggestion)
 })
 
 
 router.get('/:id', validateobjectIds, async (req, res) => {
-  const suggestion = await Suggestion.findById(req.params.id).populate('category', '-__v').populate('comments', '-__v').select('-__v')
+  const suggestion = await Suggestion.findById(req.params.id)
   if (!suggestion) return res.status(404).send('suggestion not found')
-  res.send(suggestion)
+  res.json(suggestion)
 })
 
 
@@ -91,9 +85,7 @@ router.delete('/:id', validateobjectIds, async (req, res) => {
 
   const suggestion =  await Suggestion.findById(req.params.id)
   if (!suggestion) return res.status(404).send('suggestion not found')
-   
-  await Suggestion.deleteOne({_id: req.params.id})
- 
+    
   res.send('deleted Succesfully')
  
 })
