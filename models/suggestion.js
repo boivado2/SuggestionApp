@@ -16,7 +16,6 @@ const suggestionSchema = new mongoose.Schema({
 
 suggestionSchema.pre("deleteOne",function (next)  {
   const { _id } = this.getQuery()
-  console.log(_id)
   Comment.deleteMany({ suggestionId:  _id }, next)
 })
 
