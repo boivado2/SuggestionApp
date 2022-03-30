@@ -10,12 +10,14 @@ const suggestionSchema = new mongoose.Schema({
   description: {type: String, minlength: 6, maxlength: 1000, required: true},
   category: {type:categorySchema, required:true },
   status: { type: String, default: 'Suggestion' },
+  commentsLength: {type: Number, default: 0}
 })
 
 
 suggestionSchema.pre("deleteOne",function (next)  {
   const { _id } = this.getQuery()
-  Comment.deleteMany({  _id }, next)
+  console.log(_id)
+  Comment.deleteMany({ suggestionId:  _id }, next)
 })
 
 const Suggestion = mongoose.model('Suggestion', suggestionSchema)
@@ -28,7 +30,8 @@ const validateSuggestion = (suggestion) => {
     upvotes: Joi.number().min(0).max(100000),
     description: Joi.string().min(6).max(1500).required(),
     categoryId: Joi.objectId(),
-    status: Joi.string().min(3).max(100),
+   status: Joi.string().min(3).max(100),
+    commentsLength: Joi.number()
  })
   
   return schema.validate(suggestion)

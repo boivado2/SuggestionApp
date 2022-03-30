@@ -37,16 +37,18 @@ router.post('/:id/comments', async (req, res) => {
         content: req.body.content,
         suggestionId: suggestion._id,
         parentId: req.body.parentId,
-        replyingTo: user.email,
+        replyingTo: req.body.replyingTo,
         user: {
           _id: user._id,
           image_url: user._image_url,
           username: user.username,
-          email: user.email
+          name: user.name
         }
       })
 
-      await comment.save()
+  await comment.save()
+  await suggestion.commentsLength++
+  await suggestion.save()
       res.json(comment)
 
 

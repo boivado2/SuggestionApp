@@ -85,8 +85,10 @@ router.delete('/:id', validateobjectIds, async (req, res) => {
 
   const suggestion =  await Suggestion.findById(req.params.id)
   if (!suggestion) return res.status(404).send('suggestion not found')
+
+  await Suggestion.deleteOne({_id: req.params.id})
     
-  res.send('deleted Succesfully')
+  res.json('deleted Succesfully')
  
 })
 

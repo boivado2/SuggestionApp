@@ -7,12 +7,12 @@ const commentSchema = new mongoose.Schema({
   content: { type: String, minlength: 4, maxlength: 225, required: true },
   suggestionId: { type: mongoose.Schema.Types.ObjectId, ref: "Suggestion" },
   parentId: { type: mongoose.Schema.Types.ObjectId },
-  repyingTO: {type: String},
+  replyingTo: {type: String},
   user: {
    type:new mongoose.Schema({
       image_url: { type: String, default: url, minlength: 4, maxlength: 1125, required: true },
       username: { type: String, minlength: 4, maxlength: 225, required: true },
-      email: { type: String, minlength: 5, maxlength: 1125, required: true }
+      name: { type: String, minlength: 5, maxlength: 1125, required: true }
    }),
     required:true
   },
@@ -31,7 +31,8 @@ const validateComment = (comment) => {
     content: Joi.string().min(3).max(225).required(),
    userId: Joi.objectId(),
    suggestionId: Joi.objectId(),
-   parentId : Joi.objectId()
+   parentId : Joi.objectId(),
+   replyingTo: Joi.string()
  })
   
   return schema.validate(comment)
