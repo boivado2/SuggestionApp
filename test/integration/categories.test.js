@@ -107,7 +107,7 @@ describe("/api/categories", () => {
     
     it("should return 404 if categoryId is not found", async () => {
 
-      categoryId = mongoose.Types.ObjectId
+      categoryId = mongoose.Types.ObjectId()
       const res = await exec()
 
       expect(res.status).toBe(404)
@@ -156,7 +156,7 @@ describe("/api/categories", () => {
     })
 
     it("should return 404 if categoryId is not found", async () => {
-      categoryId = mongoose.Types.ObjectId
+      categoryId = mongoose.Types.ObjectId()
       const res = await exec()
       expect(res.status).toBe(404)
     })
