@@ -1,4 +1,4 @@
 {
 	"feedPrivatekey": "",
-	"db": "mongodb://Bomane:27017,Bomane:27018,Bomane:27019/product-feed?replicaSet=rs"
+	"db": "mongodb://localhost/suggestionApp"
 }

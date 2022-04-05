@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require('mongoose')
 const { Suggestion, validate } = require('../models/suggestion')
 const { Category, } = require('../models/category')
+const {User} = require('../models/user')
 const validateobjectIds = require("../middleware/validateobjectIds");
 
 
@@ -65,12 +66,23 @@ router.put('/:id', validateobjectIds, async (req, res) => {
 
 router.patch('/:id',async (req, res) => {
   
-  const suggestion = await Suggestion.findById(req.params.id)
-  if (!suggestion) return res.status(404).json({ error: 'suggestion  not found' })
+  // const suggestion = await Suggestion.findById(req.params.id)
+  // if (!suggestion) return res.status(404).json({ error: 'suggestion  not found' })
+  const user = await User.findById(req.body.id)
+  if (!user) return res.status(400).json('user not found')
 
-  await suggestion.upvotes++
+  let suggestion = await Suggestion.findOne({ upvotes: { $in: user._id } })
+  if (suggestion) return res.json("user alreday voted")
+  
+  
+  suggestion = await Suggestion.findByIdAndUpdate(req.params.id, {
+    $push: {upvotes: req.body.id}
+  })
+  if (!suggestion) return res.status(404).json("Suggestion not found")
+
+  
   await suggestion.save()
-  res.json(suggestion)
+  res.json(suggestion.upvotes.length)
 })
 
 
