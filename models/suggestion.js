@@ -11,7 +11,7 @@ const suggestionSchema = new mongoose.Schema({
   ],
   description: {type: String, minlength: 6, maxlength: 1000, required: true},
   category: {type:categorySchema, required:true },
-  status: { type: String, default: 'Suggestion' },
+  status: { type: String, default: 'suggestion' },
   commentsLength: {type: Number, default: 0}
 })
 

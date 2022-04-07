@@ -23,7 +23,6 @@ router.post('/:id/comments', async (req, res) => {
       if (req.body.parentId) {
         let comment = await Comment.findById(req.body.parentId)
         if (!comment) return res.status(400).json({ error: 'invalid comment' })
-        
       }
   
   
