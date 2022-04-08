@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
 })
 
 
-router.put('/:id', validateobjectIds, async (req, res) => {
+router.put('/:id', [validateobjectIds,auth], async (req, res) => {
 
   const { error } = validate(req.body)
   if (error) return res.status(400).json({ error: error.message })
@@ -66,15 +66,15 @@ router.put('/:id', validateobjectIds, async (req, res) => {
 })
 
 
-router.put('/:id/upvotes', [validateobjectIds, auth], async (req, res) => {
-    const user = await User.findById(req.body.id)
+router.patch('/:id', [validateobjectIds, auth], async (req, res) => {
+    const user = await User.findById(req.user._id)
   if (!user) return res.status(400).json('user not found')
 
-  let suggestion = await Suggestion.findOne({ upvotes: { $in: user._id } })
-  if (suggestion) {
-    suggestion = await Suggestion.findOneAndUpdate({ _id: req.params.id }, { $pull: { upvotes: user._id } }, { new: true })
+  let suggestion = await Suggestion.findOne({ _id: req.params.id, upvotes: { $in: user._id } })
+  if (!suggestion) {
+    suggestion = await Suggestion.findOneAndUpdate({ _id: req.params.id }, { $push: { upvotes: user._id } }, { new: true })
   } else {
-    suggestion = await Suggestion.findByIdAndUpdate(req.params.id, { $push: { upvotes: user._id } }, { new: true })
+    suggestion = await Suggestion.findOneAndUpdate({ _id: req.params.id }, { $pull: { upvotes: user._id } }, {new:true})
   }
 
   if (!suggestion) return res.status(404).json("Suggestion not found")
@@ -91,7 +91,7 @@ router.get('/:id', validateobjectIds, async (req, res) => {
 })
 
 
-router.delete('/:id', validateobjectIds, async (req, res) => {
+router.delete('/:id', [validateobjectIds,auth], async (req, res) => {
 
   const suggestion =  await Suggestion.findById(req.params.id)
   if (!suggestion) return res.status(404).send('suggestion not found')

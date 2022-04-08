@@ -29,7 +29,6 @@ const Comment = mongoose.model('Comment', commentSchema)
 const validateComment = (comment) => {
  const schema =  Joi.object({
     content: Joi.string().min(3).max(225).required(),
-   userId: Joi.objectId(),
    suggestionId: Joi.objectId(),
    parentId : Joi.objectId(),
    replyingTo: Joi.string()
