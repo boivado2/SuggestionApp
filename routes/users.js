@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
   if (error) return res.status(400).send(error.message)
 
   let user = await User.findOne({ username: req.body.username })
-  if(user) return res.status(400).send('User name already taken!')
+  if(user) return res.status(400).send('Username already taken!')
   
   user = new User({
     username: req.body.username,
