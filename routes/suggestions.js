@@ -4,6 +4,8 @@ const { Suggestion, validate } = require('../models/suggestion')
 const { Category, } = require('../models/category')
 const {User} = require('../models/user')
 const validateobjectIds = require("../middleware/validateobjectIds");
+const auth = require("../middleware/auth");
+
 
 
 const router = express.Router()
@@ -64,7 +66,7 @@ router.put('/:id', validateobjectIds, async (req, res) => {
 })
 
 
-router.put('/:id/upvotes',async (req, res) => {
+router.put('/:id/upvotes', [validateobjectIds, auth], async (req, res) => {
     const user = await User.findById(req.body.id)
   if (!user) return res.status(400).json('user not found')
 
