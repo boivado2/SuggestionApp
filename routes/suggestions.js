@@ -90,6 +90,14 @@ router.get('/:id', validateobjectIds, async (req, res) => {
   res.json(suggestion)
 })
 
+// get all suggestions like by a user
+router.get("/:id/upvotes", [validateobjectIds, auth], async (req, res) => {
+  const suggestions = await Suggestion.find({ upvotes: { $in: req.user._id } })
+  if(!suggestions) return res.status(400).json("found nothing.")
+  res.send(suggestions)
+  
+})
+
 
 router.delete('/:id', [validateobjectIds,auth], async (req, res) => {
 

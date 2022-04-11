@@ -28,7 +28,6 @@ router.post('/:id/comments', [validateobjectIds, auth] ,async (req, res) => {
         if (!comment) return res.status(400).json({ error: 'invalid comment' })
       }
   
-  
       const suggestion = await Suggestion.findById(req.params.id)
       if (!suggestion) return res.status(404).json({error: "suggestion not found."})
       
