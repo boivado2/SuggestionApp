@@ -7,7 +7,6 @@ const validateobjectIds = require("../middleware/validateobjectIds");
 const auth = require("../middleware/auth");
 
 
-
 const router = express.Router()
 
 router.get('/', async(req, res) => {
