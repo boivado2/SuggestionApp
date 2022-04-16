@@ -112,8 +112,4 @@ router.delete('/:id', [validateobjectIds,auth], async (req, res) => {
 
 
 
-
-
-
-
 module.exports = router
