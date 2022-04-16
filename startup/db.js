@@ -4,10 +4,7 @@ const winston = require('winston')
 
 
 module.exports = () => {
-  let dbUrl = config.get('db')
-  if (process.env === 'production') {
-    dbUrl = process.env.MONGO_URI
-  }
+  let dbUrl = process.env.MONGO_URI || config.get('db')
   mongoose.connect(dbUrl).then(() => winston.log('info', "mogodb conneted succesfully"))
   
 }
