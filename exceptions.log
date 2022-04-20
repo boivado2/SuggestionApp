@@ -216,3 +216,58 @@
 {"level":"info","message":"mogodb conneted succesfully"}
 {"level":"info","message":"mogodb conneted succesfully"}
 {"level":"info","message":"mogodb conneted succesfully"}
+{"level":"error","message":"Operation `categories.insertOne()` buffering timed out after 10000ms Operation `categories.insertOne()` buffering timed out after 10000ms","stack":"MongooseError: Operation `categories.insertOne()` buffering timed out after 10000ms\n    at Timeout.<anonymous> (C:\\Users\\johng\\feedbackend\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:151:23)\n    at listOnTimeout (node:internal/timers:557:17)\n    at processTimers (node:internal/timers:500:7)"}
+{"level":"error","message":"Operation `categories.insertOne()` buffering timed out after 10000ms Operation `categories.insertOne()` buffering timed out after 10000ms","stack":"MongooseError: Operation `categories.insertOne()` buffering timed out after 10000ms\n    at Timeout.<anonymous> (C:\\Users\\johng\\feedbackend\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:151:23)\n    at listOnTimeout (node:internal/timers:557:17)\n    at processTimers (node:internal/timers:500:7)"}
+{"level":"error","message":"Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms","stack":"MongooseError: Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms\n    at Timeout.<anonymous> (C:\\Users\\johng\\feedbackend\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:151:23)\n    at listOnTimeout (node:internal/timers:557:17)\n    at processTimers (node:internal/timers:500:7)"}
+{"level":"error","message":"Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms","stack":"MongooseError: Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms\n    at Timeout.<anonymous> (C:\\Users\\johng\\feedbackend\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:151:23)\n    at listOnTimeout (node:internal/timers:557:17)\n    at processTimers (node:internal/timers:500:7)"}
+{"level":"error","message":"Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms","stack":"MongooseError: Operation `categories.findOneAndUpdate()` buffering timed out after 10000ms\n    at Timeout.<anonymous> (C:\\Users\\johng\\feedbackend\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:151:23)\n    at listOnTimeout (node:internal/timers:557:17)\n    at processTimers (node:internal/timers:500:7)"}
+{"level":"error","message":"Operation `categories.findOneAndDelete()` buffering timed out after 10000ms Operation `categories.findOneAndDelete()` buffering timed out after 10000ms","stack":"MongooseError: Operation `categories.findOneAndDelete()` buffering timed out after 10000ms\n    at Timeout.<anonymous> (C:\\Users\\johng\\feedbackend\\node_modules\\mongoose\\lib\\drivers\\node-mongodb-native\\collection.js:151:23)\n    at listOnTimeout (node:internal/timers:557:17)\n    at processTimers (node:internal/timers:500:7)"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}
+{"level":"info","message":"mogodb conneted succesfully"}

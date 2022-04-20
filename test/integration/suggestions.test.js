@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const { Suggestion } = require('../../models/suggestion')
 const { Category } = require('../../models/category')
+const {User} = require("../../models/user")
 
 
 let server
@@ -23,7 +24,7 @@ describe('/api/suggestions', () => {
         {
           title:"Ligth",
           description: "ligth mode helps to enhance comments on solutions ",
-          upvotes: 202,
+          upvotes: [],
           category: {
             _id: mongoose.Types.ObjectId(),
             title: "ux"
@@ -33,7 +34,7 @@ describe('/api/suggestions', () => {
         {
           title: "Dark",
           description: "dark mode helps to enhance comments on solutions ",
-          upvotes: 20,
+          upvotes: [],
           category: {
             _id: mongoose.Types.ObjectId(),
             title: "ui"
@@ -51,7 +52,6 @@ describe('/api/suggestions', () => {
     let newSuggestion
     let category
     let title 
-    let upvotes
     let description
     let categoryId
     beforeEach(async() => {
@@ -61,7 +61,6 @@ describe('/api/suggestions', () => {
       await category.save()
         title ="Ligth",
         description = "ligth mode helps to enhance comments on solutions ",
-        upvotes = 202,
         categoryId = category._id
     })
 
@@ -71,19 +70,16 @@ describe('/api/suggestions', () => {
       newSuggestion = {
         title: '',
         description,
-        upvotes,
         categoryId
      }
 
       const res = await exec()
- 
       expect(res.status).toBe(400)
     })
     it("should return 400 if categoryId is not valid", async () => {
       newSuggestion = {
         title,
         description,
-        upvotes,
         categoryId: ""
       }
       const res = await exec()
@@ -94,7 +90,6 @@ describe('/api/suggestions', () => {
       newSuggestion = {
         title,
         description,
-        upvotes,
         categoryId: mongoose.Types.ObjectId()
       }
       const res = await exec()
@@ -104,7 +99,6 @@ describe('/api/suggestions', () => {
       newSuggestion = {
         title,
         description,
-        upvotes,
         categoryId
       }
       const res = await exec()
@@ -119,7 +113,6 @@ describe('/api/suggestions', () => {
       newSuggestion = {
         title,
         description,
-        upvotes,
         categoryId
       }
        await exec()
@@ -133,7 +126,9 @@ describe('/api/suggestions', () => {
     let category
     let suggestion
     let suggestionId
-    beforeEach(async() => {
+    let token
+    beforeEach(async () => {
+      token = new User().generateAuthToken()
      category=  new Category({
         title:"ux"
      })
@@ -141,7 +136,7 @@ describe('/api/suggestions', () => {
       suggestion = new Suggestion({
         title :"Ligth",
         description : "ligth mode helps to enhance comments on solutions ",
-        upvotes : 202,
+        upvotes : [],
         category: {
           _id: category._id,
           title: category.title
@@ -150,16 +145,23 @@ describe('/api/suggestions', () => {
       await suggestion.save()
       suggestionId = suggestion._id
 
+
       newSuggestion = {
         title :"dark",
         description : "ligth mode helps to enhance comments on solutions ",
-        upvotes : 300,
+        upvotes : [mongoose.Types.ObjectId()],
         categoryId: category._id
       }
      
     })
 
-    const exec = async () => supertest(server).put(url + suggestionId ).send(newSuggestion)
+    const exec = async () => supertest(server).put(url + suggestionId ).set('x-auth-token', token).send(newSuggestion)
+
+    it('should return 401 if user is not logged in.', async () => {
+      token = ""
+      const res = await exec()
+      expect(res.status).toBe(401)
+    })
 
     it('should return 400 if input is not valid', async () => {
       newSuggestion.title = ""
@@ -168,6 +170,7 @@ describe('/api/suggestions', () => {
  
       expect(res.status).toBe(400)
     })
+    
     it("should return 400 if categoryId is not valid", async () => {
     newSuggestion.categoryId = mongoose.Types.ObjectId()
       const res = await exec()
@@ -199,7 +202,7 @@ describe('/api/suggestions', () => {
 
        await exec()
       const suggestion = await Suggestion.findById(suggestionId)
-      expect(suggestion.upvotes).toBe(newSuggestion.upvotes)
+      expect(suggestion.upvotes).not.toBe(newSuggestion.upvotes)
     })
   })
 
@@ -216,7 +219,6 @@ describe('/api/suggestions', () => {
       suggestion = new Suggestion({
         title :"Ligth",
         description : "ligth mode helps to enhance comments on solutions ",
-        upvotes : 202,
         category: {
           _id: category._id,
           title: category.title
@@ -258,7 +260,9 @@ describe('/api/suggestions', () => {
     let category
     let suggestion
     let suggestionId
-    beforeEach(async() => {
+    let token
+    beforeEach(async () => {
+      token = new User().generateAuthToken()
      category=  new Category({
         title:"ux"
      })
@@ -266,7 +270,6 @@ describe('/api/suggestions', () => {
       suggestion = new Suggestion({
         title :"Ligth",
         description : "ligth mode helps to enhance comments on solutions ",
-        upvotes : 202,
         category: {
           _id: category._id,
           title: category.title
@@ -279,8 +282,13 @@ describe('/api/suggestions', () => {
     })
 
 
-    const exec = async () => supertest(server).delete(url + suggestionId )
+    const exec = async () => supertest(server).delete(url + suggestionId ).set("x-auth-token", token)
 
+    it("should return 401 if user is not logged in.", async () => {
+      token = ""
+      const res = await exec()
+      expect(res.status).toBe(401)
+    })
 
     it("should return 404 if suggestionId is not a mongoose id", async () => {
       suggestionId = "90"

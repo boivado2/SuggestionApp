@@ -25,8 +25,6 @@ router.post('/', async (req, res) => {
   const suggestion = new Suggestion({
     title: req.body.title,
     description: req.body.description,
-    upvotes: req.body.upvotes,
-    status:req.body.status,
     category: {
       _id: category._id,
       title: category.title
@@ -82,7 +80,7 @@ router.patch('/:id', [validateobjectIds, auth], async (req, res) => {
   
 })
 
-
+// get a single suggestion
 router.get('/:id', validateobjectIds, async (req, res) => {
   const suggestion = await Suggestion.findById(req.params.id)
   if (!suggestion) return res.status(404).send('suggestion not found')
