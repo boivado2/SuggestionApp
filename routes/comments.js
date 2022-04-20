@@ -11,8 +11,10 @@ const auth = require("../middleware/auth");
 
 const router = express.Router()
 
-router.get('/:id/comments', validateobjectIds, async(req, res) => {
-  const comments = await Comment.find({suggestionId: req.params.id})
+router.get('/:id/comments', [validateobjectIds], async (req, res) => {
+  const suggestion = await Suggestion.findById(req.params.id)
+  if (!suggestion) return res.status(404).json({ error: "suggestion not found." })
+  const comments = await Comment.find({suggestionId: suggestion._id})
   res.send(comments)
 })
 
