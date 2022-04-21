@@ -1,4 +1,4 @@
 {
 	"feedPrivatekey": 12345,
-	"db": "mongodb://localhost/suggestionApp"
+	"db": "mongodb://localhost/test"
 }
