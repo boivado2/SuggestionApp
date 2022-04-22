@@ -2,7 +2,7 @@ const express = require("express");
 const {User, validate} = require('../models/user')
 const bcrypt = require('bcrypt');
 const router = express.Router()
-
+const _ = require('lodash')
 router.get('/', async(req, res) => {
   const users = await User.find()
   res.json(users)
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
   const token = user.generateAuthToken()
   res.header('x-auth-token', token)
     .header("access-control-expose-headers", "x-auth-token")
-    .send(user)
+    .send(_.pick(user,['_id', "name", "username", "image_url"]))
 
 })
 
