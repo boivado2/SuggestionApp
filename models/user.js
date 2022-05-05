@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
 
 
 userSchema.methods.generateAuthToken = function() {
- return jsonwebtoken.sign({_id: this._id}, config.get('feedPrivatekey'), {expiresIn: '4d'})
+ return jsonwebtoken.sign({_id: this._id}, config.get('feedPrivatekey'), {expiresIn: '2h'})
 }
 
 const User = mongoose.model('User', userSchema)
