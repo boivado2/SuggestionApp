@@ -1,3 +1,4 @@
 {
-	"feedPrivatekey": "feedPrivatekey"
+	"feedPrivatekey": "feedPrivatekey",
+	"secretKey": "secretKey"
 }
