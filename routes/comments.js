@@ -43,7 +43,7 @@ router.post('/:id/comments', [validateobjectIds, auth] ,async (req, res) => {
         replyingTo: req.body.replyingTo,
         user: {
           _id: user._id,
-          image_url: user._image_url,
+          image_url: user.image_url,
           username: user.username,
           name: user.name
         }
@@ -52,7 +52,8 @@ router.post('/:id/comments', [validateobjectIds, auth] ,async (req, res) => {
   await comment.save()
   await suggestion.commentsLength++
   await suggestion.save()
-      res.json(comment)
+  res.json(comment)
+  
 })
 
 

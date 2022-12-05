@@ -1,3 +1,7 @@
 {
-	"feedPrivatekey": ""
+	"feedPrivatekey": "",
+	"secretKey": "",
+	"region": "eu-west-2",
+	"accessKey": "AKIAQ5XRUHEJ5JGHRKEB",
+	"bucketName": "suggestion-profile-image"
 }

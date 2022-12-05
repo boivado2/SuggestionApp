@@ -1,4 +1,8 @@
 {
 	"feedPrivatekey": 12345,
-	"db": "mongodb://localhost/test"
+	"db": "mongodb://localhost/test",
+	"secretKey": "",
+	"region": "eu-west-2",
+	"accessKey": "AKIAQ5XRUHEJ5JGHRKEB",
+	"bucketName": "suggestion-profile-image"
 }
