@@ -11,7 +11,9 @@ const commentSchema = new mongoose.Schema({
    type:new mongoose.Schema({
       image_url: { type: String, required: true },
       username: { type: String, minlength: 4, maxlength: 225, required: true },
-      name: { type: String, minlength: 5, maxlength: 1125, required: true }
+     name: { type: String, minlength: 5, maxlength: 1125, required: true },
+     image_name: {type : String , required: true }
+
    }),
     required:true
   },

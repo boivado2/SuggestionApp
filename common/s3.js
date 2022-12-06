@@ -24,7 +24,7 @@ const s3 = new S3Client({
 
 const postProfileImage = async (file, imageName) => {
 try {
-  const buffer = await sharp(file.buffer).resize(320, 240, {fit: 'cover'}).toBuffer()
+  const buffer = await sharp(file.buffer).resize(40, 40, {fit: 'contain'}).toBuffer()
 
   const postParams  = {
     Bucket: config.get("bucketName"),

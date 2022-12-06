@@ -4,6 +4,7 @@ const { Comment, validateComment } = require('../models/comment')
 const { User } = require('../models/user');
 const validateobjectIds = require("../middleware/validateobjectIds");
 const auth = require("../middleware/auth");
+const {getProfileImage} = require('../common/s3')
 
 
 
@@ -14,7 +15,12 @@ const router = express.Router()
 router.get('/:id/comments', [validateobjectIds], async (req, res) => {
   const suggestion = await Suggestion.findById(req.params.id)
   if (!suggestion) return res.status(404).json({ error: "suggestion not found." })
-  const comments = await Comment.find({suggestionId: suggestion._id})
+  const comments = await Comment.find({ suggestionId: suggestion._id })
+
+  for (let comment of comments) {
+    getProfileImage(comment.user)
+    await comment.save()
+  }
   res.send(comments)
 })
 
@@ -22,9 +28,10 @@ router.get('/:id/comments', [validateobjectIds], async (req, res) => {
 
 router.post('/:id/comments', [validateobjectIds, auth] ,async (req, res) => {
 
+
       const { error } = validateComment(req.body)
-      if (error) return res.status(400).json({ error: error.message })
-      
+  if (error) return res.status(400).json({ error: error.message })
+  
       if (req.body.parentId) {
         let comment = await Comment.findById(req.body.parentId)
         if (!comment) return res.status(400).json({ error: 'invalid comment' })
@@ -45,9 +52,12 @@ router.post('/:id/comments', [validateobjectIds, auth] ,async (req, res) => {
           _id: user._id,
           image_url: user.image_url,
           username: user.username,
-          name: user.name
+          name: user.name,
+          image_name: user.image_name
+
         }
       })
+
 
   await comment.save()
   await suggestion.commentsLength++
