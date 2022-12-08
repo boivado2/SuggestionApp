@@ -3,6 +3,6 @@
 	"db": "mongodb://localhost/suggestionApp",
 	"secretKey": "",
 	"region": "eu-west-2",
-	"accessKey": "AKIAQ5XRUHEJYHHUA5XM",
+
 	"bucketName": "suggestion-profile-image"
 }

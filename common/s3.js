@@ -6,16 +6,17 @@ const config = require('config')
 const s3Options = {
   region: config.get('region'),
   credentials: {
-    secretAccessKey: config.get('secretKey'),
-    accessKeyId: config.get("accessKey")
+    secretAccessKey: process.env.SECRETE_KEY,
+    accessKeyId: process.env.ACCESS_KEY
   },
 }
+
 
 const s3 = new S3Client({
   region: config.get('region'),
   credentials: {
-    secretAccessKey: config.get('secretKey'),
-    accessKeyId: config.get('accessKey')
+    secretAccessKey: process.env.SECRETE_KEY,
+    accessKeyId: process.env.ACCESS_KEY
   }
 })
 
