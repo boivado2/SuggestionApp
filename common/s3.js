@@ -3,14 +3,6 @@ const {S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client
 const {getSignedUrl } = require("@aws-sdk/s3-request-presigner")
 const config = require('config')
 
-const s3Options = {
-  region: config.get('region'),
-  credentials: {
-    secretAccessKey: process.env.SECRETE_KEY,
-    accessKeyId: process.env.ACCESS_KEY
-  },
-}
-
 
 const s3 = new S3Client({
   region: config.get('region'),
@@ -49,7 +41,6 @@ const getProfileImage = async (data) => {
   }
   const command = new GetObjectCommand(commandParams)
   data.image_url = await getSignedUrl(s3, command, { expiresIn: 3600 })
-  
 }
 
 
